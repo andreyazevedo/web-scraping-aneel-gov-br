@@ -1,0 +1,19 @@
+{
+  "name": "web-scraping-boilerplate",
+  "version": "0.1",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "babel-node --presets @babel/preset-env src/index.js"
+  },
+  "dependencies": {
+    "cli-progress": "3.9.0",
+    "node-fetch": "2.6.0",
+    "string-hash": "1.1.3"
+  },
+  "devDependencies": {
+    "@babel/core": "7.8.6",
+    "@babel/node": "7.8.4",
+    "@babel/preset-env": "7.14.2"
+  }
+}
