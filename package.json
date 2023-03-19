@@ -10,6 +10,7 @@
     "cli-progress": "3.9.0",
     "jsdom": "^21.1.1",
     "node-fetch": "2.6.0",
+    "p-queue": "6.6.2",
     "slugify": "^1.6.5",
     "string-hash": "1.1.3"
   },

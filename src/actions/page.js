@@ -1,7 +1,10 @@
 import fetch from "node-fetch"
 import { JSDOM } from "jsdom"
+import PQueue from 'p-queue'
 import { parsePage } from "../helpers"
 import { getDownload } from "../actions/download"
+
+export const DownloadQueue = new PQueue({ concurrency: 1 });
 
 var myHeaders = new fetch.Headers();
 myHeaders.append("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -46,9 +49,9 @@ export const getPage = async ({ period, context, page }) => {
 
   const companyList = parsePage(request)
 
-  companyList.forEach(async (company) => {
-    await getDownload({ context: { viewState, eventValidation }, company })
-  });
+  await DownloadQueue.addAll(companyList.map(company => () => {
+    return getDownload({ context: { viewState, eventValidation }, company })
+  }));
 
   return { viewState, eventValidation };
 }

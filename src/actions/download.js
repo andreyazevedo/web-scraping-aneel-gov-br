@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { writeToFile } from "../helpers";
+import { writeToFile, readFile } from "../helpers";
 
 var myHeaders = new fetch.Headers();
 myHeaders.append("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -30,12 +30,19 @@ export const getDownload = async ({ context, company }) => {
     redirect: 'follow'
   };
 
-  const request = await fetch("http://informacoesbmp.aneel.gov.br/ConsultarBMPAberto.aspx", requestOptions)
-  .then(response => response.text())
-  .catch(error => console.log('error', error));
-
   const filename = `${company.agent}_${company.date}`
   const path = `dataset/${filename}.html`;
+  const file = readFile(path);
+
+  if (file) {
+    return Promise.resolve();
+  }
+
+  const request = await fetch("http://informacoesbmp.aneel.gov.br/ConsultarBMPAberto.aspx", requestOptions)
+  .then(response => response.text())
+  .catch(error => {
+    throw Error("erro ao baixar arquivo")
+  });
 
   writeToFile(path, request);
 }
