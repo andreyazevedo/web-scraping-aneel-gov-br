@@ -1,6 +1,6 @@
 {
   "name": "web-scraping-boilerplate",
-  "version": "0.1",
+  "version": "0.0.1",
   "main": "index.js",
   "private": true,
   "scripts": {

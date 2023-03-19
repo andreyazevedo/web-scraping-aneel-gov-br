@@ -26,7 +26,7 @@ export const readFile = path => {
   }
 };
 
-export const writeToFile = (name, data) => fs.writeFileSync(name, data);
+export const writeToFile = (name, data) => fs.writeFileSync(name, data, { encoding: "utf-8" });
 
 export const parsePage = html => {
   const dom = new JSDOM(html);
