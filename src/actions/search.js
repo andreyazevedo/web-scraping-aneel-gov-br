@@ -1,5 +1,9 @@
 import fetch from "node-fetch"
-import {writeToFile} from "../helpers"
+import PQueue from 'p-queue'
+import { parsePage } from "../helpers"
+import { getDownload } from "../actions/download"
+
+export const DownloadQueue = new PQueue({ concurrency: 1 });
 
 var myHeaders = new fetch.Headers();
 myHeaders.append("Accept", "*/*");
@@ -34,6 +38,12 @@ export const getSearch = async ({ start, end }) => {
 
   const viewState = /__VIEWSTATE\|\/.+(?<!=)=(?!=)/.exec(request)?.[0].replace("__VIEWSTATE|", "")
   const eventValidation = /__EVENTVALIDATION*.+==/gm.exec(request)?.[0].replace("__EVENTVALIDATION|", "")
+
+  const companyList = parsePage(request)
+
+  await DownloadQueue.addAll(companyList.map(company => () => {
+    return getDownload({ context: { viewState, eventValidation }, company })
+  }));
 
   return { viewState, eventValidation };
 }

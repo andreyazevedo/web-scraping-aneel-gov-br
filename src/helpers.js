@@ -20,7 +20,7 @@ export const readFile = path => {
   try {
     const file = fs.readFileSync(path, 'utf8');
 
-    return JSON.parse(file);
+    return file;
   } catch (error) {
     return;
   }

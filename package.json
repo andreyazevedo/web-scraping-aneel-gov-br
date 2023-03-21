@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "cli-progress": "3.9.0",
+    "iconv": "^3.0.1",
+    "iconv-lite": "^0.6.3",
     "jsdom": "^21.1.1",
     "node-fetch": "2.6.0",
     "p-queue": "6.6.2",

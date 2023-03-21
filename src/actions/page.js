@@ -47,11 +47,15 @@ export const getPage = async ({ period, context, page }) => {
   const viewState =  dom.window.document.querySelector(".aspNetHidden #__VIEWSTATE").value
   const eventValidation = dom.window.document.querySelector(".aspNetHidden #__EVENTVALIDATION").value
 
+  const lastNav = dom.window.document.querySelector(".GridPager tr td:last-child")
+  const hasMorePages = lastNav.innerText === "..."
+  const isLastPage = lastNav.innerText === String(page)
+
   const companyList = parsePage(request)
 
   await DownloadQueue.addAll(companyList.map(company => () => {
     return getDownload({ context: { viewState, eventValidation }, company })
   }));
 
-  return { viewState, eventValidation };
+  return { viewState, eventValidation, isLastPage };
 }

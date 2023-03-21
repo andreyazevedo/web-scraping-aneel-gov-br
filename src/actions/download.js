@@ -1,3 +1,4 @@
+import { Iconv } from "iconv";
 import fetch from "node-fetch";
 import { writeToFile, readFile } from "../helpers";
 
@@ -35,15 +36,19 @@ export const getDownload = async ({ context, company }) => {
   const file = readFile(path);
 
   if (file) {
+    console.log("DEBUG: ARQUIVO LIDO DO CACHE", path)
     return Promise.resolve();
   }
 
   const request = await fetch("http://informacoesbmp.aneel.gov.br/ConsultarBMPAberto.aspx", requestOptions)
-  .then(response => response.text())
+  .then(response => response.buffer())
   .catch(error => {
-    throw Error("erro ao baixar arquivo")
+    throw Error("erro ao baixar arquivo", error)
   });
 
-  writeToFile(path, request);
+  const iconv = new Iconv('ISO-8859-1', 'UTF-8');
+  const buffer = iconv.convert(request);
+
+  writeToFile(path, buffer.toString('UTF-8'));
 }
 
